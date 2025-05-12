@@ -10,21 +10,21 @@ with open('README.md', encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name="threads-blog",
+    name="xr_threads-blog",
     version="0.1.0",
     description="A modern, lightweight blog platform built with FastAPI",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Threads Contributors",
-    author_email="info@example.com",
-    url="https://github.com/yourusername/threads",
+    author="xr_threads Contributors",
+    author_email="mdcb@cubegeek.com",
+    url="https://github.com/yourusername/xr_threads",
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
     install_requires=requirements,
     python_requires=">=3.12",
     entry_points={
         "console_scripts": [
-            "threads-server=main:run_app",
+            "xr_threads-server=main:run_app",
         ],
     },
     classifiers=[
@@ -43,11 +43,10 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: WSGI",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
-    keywords="fastapi, blog, web, api, rest, threads",
+    keywords="fastapi, blog, web, api, rest, xr_threads",
     project_urls={
-        "Documentation": "https://github.com/yourusername/threads",
-        "Source": "https://github.com/yourusername/threads",
-        "Tracker": "https://github.com/yourusername/threads/issues",
+        "Documentation": "https://github.com/yourusername/xr_threads",
+        "Source": "https://github.com/yourusername/xr_threads",
+        "Tracker": "https://github.com/yourusername/xr_threads/issues",
     },
 )
-
