@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/threads_db
+      - SECRET_KEY=changeme_in_production
+      - DEBUG=False
+      - ENVIRONMENT=production
+      - PORT=8000
+      - WORKERS=2
+      - LOG_LEVEL=info
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - ./templates:/app/templates
+      - ./static:/app/static
+    networks:
+      - threads-network
+
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./db/ddl:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=threads_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - threads-network
+
+volumes:
+  postgres_data:
+
+networks:
+  threads-network:
+    driver: bridge
+

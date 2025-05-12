@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+virtualenv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.ropeproject/
+.ruff_cache/
+
+# Log files
+*.log
+logs/
+log/
+
+# Local configuration
+instance/
+*.cfg
+config.py
+local_settings.py
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Test coverage and reports
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Documentation
+docs/_build/
+site/
+
+# Misc
+.ipynb_checkpoints
+*.bak
+

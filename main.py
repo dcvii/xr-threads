@@ -2,14 +2,16 @@ from fastapi import FastAPI, Form, Depends, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
-from models import Base, BlogPost
+from models import Base, BlogPost, User, Comment
 from database import engine, get_db
 from typing import List, Optional
 from pydantic import BaseModel
 from fastapi.middleware.sessions import SessionMiddleware
 import secrets
 from passlib.context import CryptContext
-import pwd
+import uvicorn
+import typer
+import sys
 
 
 
@@ -150,3 +152,47 @@ def get_current_user(request: Request, db: Session = Depends(get_db)) -> Optiona
     if user_id:
         return db.query(User).filter(User.user_id == user_id).first()
     return None
+
+
+def run_app(host: str = "0.0.0.0", port: int = 8000, reload: bool = False, workers: int = 1, log_level: str = "info"):
+    """
+    Run the FastAPI application with uvicorn.
+    
+    Args:
+        host: Host to bind the server to
+        port: Port to bind the server to
+        reload: Enable auto-reload for development
+        workers: Number of worker processes
+        log_level: Logging level
+    """
+    try:
+        uvicorn.run(
+            "main:app",
+            host=host,
+            port=port,
+            reload=reload,
+            workers=workers,
+            log_level=log_level
+        )
+    except Exception as e:
+        print(f"Error starting server: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    # Create a Typer CLI app for command line usage
+    cli = typer.Typer()
+    
+    @cli.command()
+    def start(
+        host: str = typer.Option("0.0.0.0", help="Host to bind the server to"),
+        port: int = typer.Option(8000, help="Port to bind the server to"),
+        reload: bool = typer.Option(False, help="Enable auto-reload for development"),
+        workers: int = typer.Option(1, help="Number of worker processes"),
+        log_level: str = typer.Option("info", help="Logging level")
+    ):
+        """Run the Threads blog application server"""
+        run_app(host, port, reload, workers, log_level)
+    
+    # Run the CLI app if called directly
+    cli()

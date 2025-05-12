@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+virtualenv/
+
+# Version Control
+.git/
+.gitignore
+.github/
+
+# Editor and IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.ropeproject/
+.ruff_cache/
+
+# Local Configuration
+.env
+.env.*
+!.env.example
+*.cfg
+instance/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Build and Distribution
+dist/
+build/
+*.egg-info/
+
+# Log files
+*.log
+logs/
+log/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Test data and temporary files
+tests/data/
+tmp/
+.tmp/
+*.tmp
+temp/
+.temp/
+*.temp
+
