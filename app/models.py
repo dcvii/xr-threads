@@ -34,7 +34,7 @@ class BlogPost(Base):
 
     author = relationship('User', back_populates='posts')
     comments = relationship('Comment', back_populates='post')
-    metadata = relationship('PostMetadata', uselist=False, back_populates='post')
+    post_metadata = relationship('PostMetadata', uselist=False, back_populates='post')
 
 class Comment(Base):
     __tablename__ = 'comments'
@@ -73,7 +73,7 @@ class PostMetadata(Base):
     last_viewed_at = Column(DateTime(timezone=True))
     last_liked_at = Column(DateTime(timezone=True))
 
-    post = relationship('BlogPost', back_populates='metadata')
+    post = relationship('BlogPost', back_populates='post_metadata')
 
 class Engagement(Base):
     __tablename__ = 'engagements'

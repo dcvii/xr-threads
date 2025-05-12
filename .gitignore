@@ -14,6 +14,7 @@ virtualenv/
 
 # Environment variables
 .env
+.envrc
 .env.*
 !.env.example
 
@@ -66,4 +67,3 @@ site/
 # Misc
 .ipynb_checkpoints
 *.bak
-

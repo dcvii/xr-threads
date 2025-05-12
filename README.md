@@ -1,4 +1,4 @@
-# Threads - A FastAPI Blog Platform
+# XR-Threads - A FastAPI Blog Platform
 
 A modern, lightweight blog platform built with FastAPI, SQLAlchemy, and Jinja2 templates. Threads provides a simple yet powerful system for creating and managing blog posts with nested comments, user authentication, and rich engagement analytics.
 
@@ -164,4 +164,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - FastAPI for the excellent web framework
 - SQLAlchemy for the powerful ORM
 - The open-source community for continuous inspiration
-

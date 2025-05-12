@@ -2,11 +2,12 @@ from fastapi import FastAPI, Form, Depends, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
-from models import Base, BlogPost, User, Comment
-from database import engine, get_db
+from app.models import Base, BlogPost, User, Comment
+from app.database import engine, get_db
 from typing import List, Optional
 from pydantic import BaseModel
-from fastapi.middleware.sessions import SessionMiddleware
+from starlette_sessions.middleware import SessionMiddleware
+from app.auth import get_current_user
 import secrets
 from passlib.context import CryptContext
 import uvicorn
@@ -65,7 +66,7 @@ def read_post(slug: str, request: Request, db: Session = Depends(get_db)):
 #
 # # Handle new post submission
 @app.post("/new-post")
-def create_post(title: str = Form(...), slug: str = Form(...), content: str = Form(...), request: Request = Depends(), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def create_post(request: Request, title: str = Form(...), slug: str = Form(...), content: str = Form(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not current_user:
         return RedirectResponse(url="/login", status_code=303)
     new_post = BlogPost(title=title, slug=slug, content=content, author_id=current_user.user_id, published=True)
@@ -146,15 +147,6 @@ def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/", status_code=303)
 
-### helper function
-def get_current_user(request: Request, db: Session = Depends(get_db)) -> Optional[User]:
-    user_id = request.session.get("user_id")
-    if user_id:
-        return db.query(User).filter(User.user_id == user_id).first()
-    return None
-
-
-def run_app(host: str = "0.0.0.0", port: int = 8000, reload: bool = False, workers: int = 1, log_level: str = "info"):
     """
     Run the FastAPI application with uvicorn.
     
