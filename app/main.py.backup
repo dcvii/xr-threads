@@ -7,8 +7,6 @@ from app.database import engine, get_db
 from typing import List, Optional
 from pydantic import BaseModel
 from starlette_sessions.middleware import SessionMiddleware
-from starlette_sessions.signedcookie.backend import SignedCookieSessionBackend
-import os
 from app.auth import get_current_user
 import secrets
 from passlib.context import CryptContext
@@ -22,10 +20,10 @@ import sys
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Threads Blog API")
-app.add_middleware(SessionMiddleware, backend=SignedCookieSessionBackend(secret_key=os.environ.get("SECRET_KEY", secrets.token_hex(16))))
+app.add_middleware(SessionMiddleware, secret_key=secrets.token_hex(16))
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-templates = Jinja2Templates(directory=os.path.join(os.path.dirname(os.path.dirname(__file__)), "templates"))
+templates = Jinja2Templates(directory="templates")
 
 # Pydantic Schemas
 class BlogPostCreate(BaseModel):
@@ -52,7 +50,7 @@ class BlogPostOut(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request, db: Session = Depends(get_db)):
     posts = db.query(BlogPost).filter(BlogPost.published).all()
-    return templates.TemplateResponse("index.htm", {"request": request, "posts": posts})
+    return templates.TemplateResponse("index.html", {"request": request, "posts": posts})
 
 
 # Update post detail view to include comments
@@ -62,7 +60,7 @@ def read_post(slug: str, request: Request, db: Session = Depends(get_db)):
     if post is None:
         raise HTTPException(status_code=404, detail="Post not found")
     comments = db.query(Comment).filter(Comment.post_id == post.post_id).all()
-    return templates.TemplateResponse("post_detail.htm", {"request": request, "post": post, "comments": comments})
+    return templates.TemplateResponse("post_detail.html", {"request": request, "post": post, "comments": comments})
 
 # Routes
 #
@@ -79,7 +77,7 @@ def create_post(request: Request, title: str = Form(...), slug: str = Form(...),
 # Show new post form
 @app.get("/new-post", response_class=HTMLResponse)
 def new_post_form(request: Request):
-    return templates.TemplateResponse("new_post.htm", {"request": request})
+    return templates.TemplateResponse("new_post.html", {"request": request})
 
 @app.post("/posts/", response_model=BlogPostOut)
 def create_post(post: BlogPostCreate, db: Session = Depends(get_db)):
@@ -131,7 +129,7 @@ def add_comment(slug: str, post_id: int = Form(...), author_id: int = Form(...),
 # Show login form
 @app.get("/login", response_class=HTMLResponse)
 def login_form(request: Request):
-    return templates.TemplateResponse("login.htm", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request})
 
 # Handle login submission
 @app.post("/login")
